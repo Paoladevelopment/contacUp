@@ -31,8 +31,8 @@ export const Contactos = ({ contactos }) => {
             </svg>
 
             <Contacto
-              nombre={contacto.nombre}
-              tel={contacto.tel}
+              nombre={contacto.name}
+              tel={contacto.phone}
               email={contacto.email}
             />
           </li>

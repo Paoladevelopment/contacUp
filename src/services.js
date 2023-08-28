@@ -1,3 +1,5 @@
+import { data } from "autoprefixer";
+
 export const subirInfo = async (data) => {
   try {
     const response = await fetch(
@@ -15,3 +17,9 @@ export const subirInfo = async (data) => {
     return 'error en el servidor';
   }
 };
+
+
+export const obtenerInfo = async () => {
+  const response = await fetch("https://8j5baasof2.execute-api.us-west-2.amazonaws.com/production/tests/trucode/items");
+  return await response.json();
+}

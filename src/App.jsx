@@ -1,8 +1,14 @@
+import { useState } from 'react';
 import './App.css';
 import { InstruccionesUso } from './components/InstruccionesUso/InstruccionesUso';
 import { Uploader } from './components/Uploader/Uploader';
+import { Contactos } from './components/Contactos/Contactos';
 
 function App() {
+  const [contactos, setContactos] = useState([]);
+  const establecerContactos = (datos) =>{
+    setContactos(datos.items);
+  }
   return (
     <>
       <div className='text-center'>
@@ -21,7 +27,9 @@ function App() {
         </p>
       </div>
       <InstruccionesUso />
-      <Uploader />
+      <Uploader establecerDatos={establecerContactos}/>
+      {contactos.length !== 0 && <Contactos contactos={contactos}/>
+      }
     </>
   );
 }

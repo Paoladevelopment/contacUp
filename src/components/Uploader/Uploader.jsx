@@ -1,12 +1,14 @@
+import PropTypes from 'prop-types'
 import Papa from 'papaparse';
 import { useState } from 'react';
 import { Boton } from '../Boton/Boton';
 import { Input } from '../Input/Input';
 import { useEffect } from 'react';
-import { subirInfo } from '../../services';
-import { formatoNumero } from '../helpers/formatoNumero';
+import { obtenerInfo, subirInfo } from '../../services';
+import { formatoNumero } from '../../helpers/formatoNumero';
+import { validarEmail, validarTel } from '../../helpers/validaciones';
 
-export const Uploader = () => {
+export const Uploader = ({establecerDatos}) => {
   const [colorSoltarArchivo, setColorSoltarArchivo] = useState('bg-white');
   const [textoSoltarArchivo, setTextoSoltarArchivo] = useState(
     'Arrastra aquí tu archivo'
@@ -17,6 +19,7 @@ export const Uploader = () => {
     return datos
       .map((fila) => {
         if (fila.length === 3) {
+          if(!validarEmail(fila[2]) || !validarTel(fila[1])) return null;
           return fila;
         } else {
           return null;
@@ -26,6 +29,7 @@ export const Uploader = () => {
   };
   const enviarDatos = async (resultados) => {
     const datosASubir = filtrarDatos(resultados.data);
+    console.log("datos a subir", datosASubir);
     for (let fila of datosASubir) {
       const conctacto = {
         name: fila[0],
@@ -35,6 +39,8 @@ export const Uploader = () => {
       const respuesta = await subirInfo(conctacto);
       console.log(respuesta);
     }
+    const datosSubidos = await obtenerInfo();
+    establecerDatos(datosSubidos);
   };
   const procesarArchivo = (archivo) => {
     Papa.parse(archivo, {
@@ -96,6 +102,7 @@ export const Uploader = () => {
       setArchivo(archivos);
     } else {
       alert('Solo se admite la subida de un archivo.');
+      if(archivo.length !== 0) darFormato(archivo[0].name);
     }
   };
 
@@ -104,6 +111,7 @@ export const Uploader = () => {
       validarFormatoArchivo(archivo[0]);
     }
   }, [archivo]);
+
   return (
     <form className='w-1/2 h-[12.5rem] text-hawkes-blue-800 border-2 border-indigo-300 rounded border-dashed flex flex-col items-center justify-center gap-2'>
       <div className='text-center'>
@@ -151,3 +159,7 @@ export const Uploader = () => {
     </form>
   );
 };
+
+Uploader.propTypes = {
+  establecerDatos: PropTypes.func,
+}
