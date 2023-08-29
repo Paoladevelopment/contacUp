@@ -9,5 +9,5 @@
 }
 
 #root {
-  @apply w-full bg-hawkes-blue-500 flex flex-col items-center py-12;
+  @apply w-full bg-hawkes-blue-500 flex flex-col items-center py-12 gap-4;
 }

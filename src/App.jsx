@@ -3,12 +3,14 @@ import './App.css';
 import { InstruccionesUso } from './components/InstruccionesUso/InstruccionesUso';
 import { Uploader } from './components/Uploader/Uploader';
 import { Contactos } from './components/Contactos/Contactos';
+import { Loader } from './components/Loader/Loader';
 
 function App() {
   const [contactos, setContactos] = useState([]);
-  const establecerContactos = (datos) =>{
+  const [showLoader, setShowLoader] = useState(false);
+  const establecerContactos = (datos) => {
     setContactos(datos.items);
-  }
+  };
   return (
     <>
       <div className='text-center'>
@@ -27,9 +29,12 @@ function App() {
         </p>
       </div>
       <InstruccionesUso />
-      <Uploader establecerDatos={establecerContactos}/>
-      {contactos.length !== 0 && <Contactos contactos={contactos}/>
-      }
+      <Uploader
+        establecerDatos={establecerContactos}
+        setUploading={(isUploading) => setShowLoader(isUploading)}
+      />
+      {showLoader && <Loader />}
+      {contactos.length !== 0 && <Contactos contactos={contactos} />}
     </>
   );
 }

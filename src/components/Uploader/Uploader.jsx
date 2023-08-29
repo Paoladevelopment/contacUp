@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 import Papa from 'papaparse';
 import { useState } from 'react';
 import { Boton } from '../Boton/Boton';
@@ -8,18 +8,17 @@ import { obtenerInfo, subirInfo } from '../../services';
 import { formatoNumero } from '../../helpers/formatoNumero';
 import { validarEmail, validarTel } from '../../helpers/validaciones';
 
-export const Uploader = ({establecerDatos}) => {
+export const Uploader = ({ establecerDatos, setUploading }) => {
   const [colorSoltarArchivo, setColorSoltarArchivo] = useState('bg-white');
   const [textoSoltarArchivo, setTextoSoltarArchivo] = useState(
     'Arrastra aquí tu archivo'
   );
   const [archivo, setArchivo] = useState([]);
-
   const filtrarDatos = (datos) => {
     return datos
       .map((fila) => {
         if (fila.length === 3) {
-          if(!validarEmail(fila[2]) || !validarTel(fila[1])) return null;
+          if (!validarEmail(fila[2]) || !validarTel(fila[1])) return null;
           return fila;
         } else {
           return null;
@@ -29,7 +28,11 @@ export const Uploader = ({establecerDatos}) => {
   };
   const enviarDatos = async (resultados) => {
     const datosASubir = filtrarDatos(resultados.data);
-    console.log("datos a subir", datosASubir);
+    if (datosASubir.length === 0)
+      return alert(
+        'Asegúrate de que el archivo CSV que cargues siga el formato indicado al inicio.'
+      );
+    setUploading(true);
     for (let fila of datosASubir) {
       const conctacto = {
         name: fila[0],
@@ -39,6 +42,7 @@ export const Uploader = ({establecerDatos}) => {
       const respuesta = await subirInfo(conctacto);
       console.log(respuesta);
     }
+    setUploading(false);
     const datosSubidos = await obtenerInfo();
     establecerDatos(datosSubidos);
   };
@@ -72,7 +76,6 @@ export const Uploader = ({establecerDatos}) => {
     if (!extensionesValidas.includes(extensionArchivo)) {
       setArchivo([]);
       alert('No es un archivo válido.\nFormato válido: csv o texto plano');
-      darFormato('Arrastra aquí tu archivo', 'bg-white');
     } else {
       darFormato(archivo.name);
       procesarArchivo(archivo);
@@ -92,7 +95,7 @@ export const Uploader = ({establecerDatos}) => {
     e.preventDefault();
     archivo.length === 0
       ? darFormato('Arrastra aquí tu archivo', 'bg-white')
-      : darFormato(archivo[0].name);
+      : darFormato(archivo[0].name, 'bg-white');
   };
   const handleDrop = (e) => {
     e.preventDefault();
@@ -102,7 +105,7 @@ export const Uploader = ({establecerDatos}) => {
       setArchivo(archivos);
     } else {
       alert('Solo se admite la subida de un archivo.');
-      if(archivo.length !== 0) darFormato(archivo[0].name);
+      if (archivo.length !== 0) darFormato(archivo[0].name);
     }
   };
 
@@ -162,4 +165,5 @@ export const Uploader = ({establecerDatos}) => {
 
 Uploader.propTypes = {
   establecerDatos: PropTypes.func,
-}
+  setUploading: PropTypes.func,
+};

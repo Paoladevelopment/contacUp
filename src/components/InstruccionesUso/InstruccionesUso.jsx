@@ -7,7 +7,7 @@ export const InstruccionesUso = () => {
       <div className='basis-2/4'>
         <h3 className='text-xl text-hawkes-blue-800 font-medium flex items-center gap-2 md:text-2xl'>
           <span className='text-4xl text-hawkes-blue-900 font-bold'>1.</span>
-          Carga tu archivo csv.
+          Carga tu archivo csv con este formato.
         </h3>
         <div className='w-full h-[15.625rem] mt-4 mx-auto bg-shark-500 rounded sm:h-[25rem] sm:w-4/5'>
           <div className='w-full h-1/10 bg-shark-400 opacity-25 flex justify-end items-center pr-2'>
@@ -95,6 +95,9 @@ export const InstruccionesUso = () => {
             </p>
           </div>
         </div>
+        <p className='text-center mt-4'>
+          El número telefónico debe ser de 10 dígitos.
+        </p>
       </div>
       <div className='basis-2/4'>
         <h3 className='text-xl text-hawkes-blue-800 font-medium flex items-center gap-2 md:text-2xl'>
